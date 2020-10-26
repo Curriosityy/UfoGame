@@ -6,10 +6,25 @@
 #include "GameFramework/Pawn.h"
 #include "Ship.generated.h"
 
+
+class UStaticMeshComponent;
+class USceneComponent;
 UCLASS()
 class UFOSHOOTER_API AShip : public APawn
 {
 	GENERATED_BODY()
+
+private:
+
+protected:
+	UPROPERTY(EditAnywhere)
+	int maxHP;
+	int hp;
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* meshComponent;
+	UPROPERTY(EditAnywhere)
+	USceneComponent* root;
+public:
 
 public:
 	// Sets default values for this pawn's properties
