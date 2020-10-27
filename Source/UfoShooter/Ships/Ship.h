@@ -5,40 +5,29 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Ship.generated.h"
-
-
-class UStaticMeshComponent;
-class USceneComponent;
+class UShipMovementComponent;
 UCLASS()
 class UFOSHOOTER_API AShip : public APawn
 {
 	GENERATED_BODY()
 
 private:
-
-protected:
 	UPROPERTY(EditAnywhere)
-	int maxHP;
+		int maxHP;
+protected:
 	int hp;
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* meshComponent;
+		UStaticMeshComponent* meshComponent;
 	UPROPERTY(EditAnywhere)
-	USceneComponent* root;
-public:
+		UShipMovementComponent* movementComponent;
 
-public:
-	// Sets default values for this pawn's properties
-	AShip();
-
-protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	void MoveX(float value);
+	void MoveY(float value);
 
-public:	
-	// Called every frame
+public:
+	AShip();
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	UPawnMovementComponent* GetMovementComponent() const;
 };

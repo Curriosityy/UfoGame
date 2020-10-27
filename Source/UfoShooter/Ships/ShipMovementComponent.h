@@ -12,5 +12,9 @@ UCLASS()
 class UFOSHOOTER_API UShipMovementComponent : public UPawnMovementComponent
 {
 	GENERATED_BODY()
+public:
+	UShipMovementComponent();
+private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 };
