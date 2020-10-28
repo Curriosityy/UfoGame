@@ -2,7 +2,7 @@
 
 
 #include "Bullet.h"
-
+#include <UfoShooter\IDamageable.h>
 // Sets default values
 ABullet::ABullet()
 {
@@ -30,6 +30,9 @@ void ABullet::Tick(float DeltaTime)
 
 void ABullet::BulletHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
-	check(0 && "You must override this");
+	if (OtherActor->GetClass()->IsChildOf(IDamageable::StaticClass()))
+	{
+		((IDamageable*)OtherActor)->DealDamage(damage);
+	}
 }
 

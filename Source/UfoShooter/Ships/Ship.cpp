@@ -3,38 +3,46 @@
 
 #include "Ship.h"
 #include "ShipMovementComponent.h"
-
+#include <UfoShooter\Guns\Gun.h>
 // Sets default values
 AShip::AShip()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	meshComponent->SetRelativeLocation(FVector(400, -500, 0));
+
 	Tags.Add("Ship");
 	maxHP = 100;
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
-	meshComponent->AddToRoot();
-	//RootComponent = meshComponent;
+
+	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	meshComponent->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0, 0, -90)));
+	meshComponent->SetRelativeLocation(FVector(400, -500, 0));
+	meshComponent->AttachToComponent(RootComponent,FAttachmentTransformRules::KeepWorldTransform);
+
 	movementComponent = CreateDefaultSubobject<UShipMovementComponent>("MovementComponent");
 	movementComponent->UpdatedComponent = RootComponent;
+
+	if(startGunBP)
+		currentGun = GetWorld()->SpawnActor<AGun>(startGunBP);
 }
 
-// Called when the game starts or when spawned
 void AShip::BeginPlay()
 {
 	Super::BeginPlay();
 	hp = maxHP;
+	StartShooting();
 }
 
-// Called every frame
+void AShip::StartShooting()
+{
+	GetWorldTimerManager().SetTimer(timeHandler, this, &AShip::Shoot, currentGun->GetFirerate(), true, .0f);
+}
+
 void AShip::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
 void AShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -46,7 +54,6 @@ void AShip::MoveX(float value)
 {
 	if (movementComponent && (movementComponent->UpdatedComponent == RootComponent))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Move %f"), value);
 		movementComponent->AddInputVector(GetActorRightVector() * value);
 	}
 }
@@ -54,9 +61,29 @@ void AShip::MoveY(float value)
 {
 	if (movementComponent && (movementComponent->UpdatedComponent == RootComponent))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Move %f"), value);
 		movementComponent->AddInputVector(GetActorForwardVector() * value);
 	}
+}
+
+void AShip::Shoot()
+{
+	currentGun->FireProjectile();
+}
+
+void AShip::SwitchGun(AGun* newGun)
+{
+	StopShooting();
+	currentGun = newGun;
+	StartShooting();
+}
+
+void AShip::StopShooting()
+{
+	GetWorldTimerManager().ClearTimer(timeHandler);
+}
+
+void AShip::Die()
+{
 }
 
 UPawnMovementComponent* AShip::GetMovementComponent() const
@@ -64,3 +91,16 @@ UPawnMovementComponent* AShip::GetMovementComponent() const
 	return movementComponent;
 }
 
+AGun* AShip::GetCurrentGun() const
+{
+	return currentGun;
+}
+
+void AShip::DealDamage(int damage)
+{
+	hp -= damage;
+	if (damage <= 0)
+	{
+		Die();
+	}
+}
