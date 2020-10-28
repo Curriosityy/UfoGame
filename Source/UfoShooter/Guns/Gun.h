@@ -20,9 +20,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float fireRate = 1.f;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<ABullet> bullet;
+		TSubclassOf<ABullet> bulletBP;
 	virtual void BeginPlay() override;
-;
+	UWorld* world;
 
 public:	
 	// Called every frame

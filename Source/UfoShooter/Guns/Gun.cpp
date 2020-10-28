@@ -2,7 +2,7 @@
 
 
 #include "Gun.h"
-
+#include <UfoShooter\Bullets\Bullet.h>
 // Sets default values
 AGun::AGun()
 {
@@ -20,7 +20,7 @@ float AGun::GetFirerate() const
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	world = GetWorld();
 }
 
 // Called every frame
@@ -32,6 +32,10 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::FireProjectile()
 {
-	check(0 && "FireProjectile need to be overrided");
+	FActorSpawnParameters pars;
+	pars.Owner = GetOwner();
+	auto bullet = world->SpawnActor<ABullet>(bulletBP, pars);
+	bullet->SetActorTransform(GetActorTransform());
+	bullet->Fire();
 }
 

@@ -20,7 +20,6 @@ void UShipMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Tick
 	
 	if (!DesiredMovementThisFrame.IsNearlyZero())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Move %f %f %f"), DesiredMovementThisFrame.X, DesiredMovementThisFrame.Y, DesiredMovementThisFrame.Z);
 		FHitResult Hit;
 		SafeMoveUpdatedComponent(DesiredMovementThisFrame, UpdatedComponent->GetComponentRotation(), true, Hit);
 	}

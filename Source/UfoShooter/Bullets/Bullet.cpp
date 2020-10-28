@@ -2,7 +2,7 @@
 
 
 #include "Bullet.h"
-#include <UfoShooter\IDamageable.h>
+#include <UfoShooter\Damageable.h>
 // Sets default values
 ABullet::ABullet()
 {
@@ -16,7 +16,7 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-	OnActorHit.AddDynamic(this, &ABullet::BulletHit);
+	OnActorBeginOverlap.AddDynamic(this, &ABullet::BulletHit);
 }
 
 
@@ -25,14 +25,24 @@ void ABullet::BeginPlay()
 void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void ABullet::BulletHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+void ABullet::BulletHit(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (OtherActor->GetClass()->IsChildOf(IDamageable::StaticClass()))
+	if (GetOwner() == OtherActor)
 	{
-		((IDamageable*)OtherActor)->DealDamage(damage);
+		return;
+	}
+	auto damageable = Cast<IDamageable>(OtherActor);
+	if(damageable)
+	{
+		damageable->DealDamage(damage);
 	}
 }
+
+void ABullet::Fire()
+{
+	check(0 && "Fire need to be overrided");
+}
+
 

@@ -12,24 +12,26 @@ AShip::AShip()
 
 	Tags.Add("Ship");
 	maxHP = 100;
-	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
-	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	meshComponent->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0, 0, -90)));
 	meshComponent->SetRelativeLocation(FVector(400, -500, 0));
 	meshComponent->AttachToComponent(RootComponent,FAttachmentTransformRules::KeepWorldTransform);
 
-	movementComponent = CreateDefaultSubobject<UShipMovementComponent>("MovementComponent");
+	movementComponent = CreateDefaultSubobject<UShipMovementComponent>(TEXT("MovementComponent"));
 	movementComponent->UpdatedComponent = RootComponent;
 
-	if(startGunBP)
-		currentGun = GetWorld()->SpawnActor<AGun>(startGunBP);
+	muzzlePosition = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzlePosition"));
+	muzzlePosition->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	
 }
 
 void AShip::BeginPlay()
 {
 	Super::BeginPlay();
 	hp = maxHP;
+	SwitchGun(GetWorld()->SpawnActor<AGun>(startGunBP));
 	StartShooting();
 }
 
@@ -74,6 +76,9 @@ void AShip::SwitchGun(AGun* newGun)
 {
 	StopShooting();
 	currentGun = newGun;
+	currentGun->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	currentGun->SetActorTransform(muzzlePosition->GetComponentTransform());
+	newGun->SetOwner(this);
 	StartShooting();
 }
 

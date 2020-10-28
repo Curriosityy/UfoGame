@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include <UfoShooter\IDamageable.h>
+#include <UfoShooter\Damageable.h>
 #include "Ship.generated.h"
 class UShipMovementComponent;
 class AGun;
 UCLASS()
-class UFOSHOOTER_API AShip : public APawn,public IDamageable
+class UFOSHOOTER_API AShip : public APawn, public IDamageable
 {
 	GENERATED_BODY()
 
@@ -24,17 +24,25 @@ protected:
 		UShipMovementComponent* movementComponent;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AGun> startGunBP;
+	UPROPERTY(EditAnywhere)
+		USceneComponent* muzzlePosition;
+
 	AGun* currentGun;
 	FTimerHandle timeHandler;
 	virtual void BeginPlay() override;
 
 	virtual void MoveX(float value);
 	virtual void MoveY(float value);
+	UFUNCTION()
 	virtual void Shoot();
 
+	UFUNCTION()
 	void StartShooting();
+	UFUNCTION()
 	void SwitchGun(AGun* newGun);
+	UFUNCTION()
 	void StopShooting();
+	UFUNCTION()
 	void Die();
 public:
 	AShip();
@@ -42,5 +50,5 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UPawnMovementComponent* GetMovementComponent() const;
 	AGun* GetCurrentGun() const;
-	virtual void DealDamage(int damage) override;
+	virtual void DealDamage(int damage);
 };
