@@ -2,8 +2,9 @@
 
 
 #include "ProjectileBullet.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
-AProjectileBullet::AProjectileBullet():Super()
+AProjectileBullet::AProjectileBullet()
 {
 	staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootMesh"));
 	RootComponent = staticMesh;
@@ -12,6 +13,16 @@ AProjectileBullet::AProjectileBullet():Super()
 	staticMesh->SetGenerateOverlapEvents(true);
 	staticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	
+	movement=CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+	movement->Bounciness = 1.f;
+	movement->bShouldBounce = false;
+	movement->ProjectileGravityScale = 0.0f;
+	movement->Friction = 0;
+	movement->Velocity = FVector(0, 0, 0);
+	movement->bSnapToPlaneAtStart = true;
+	movement->bConstrainToPlane = true;
+	movement->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::Z);
+
 }
 
 void AProjectileBullet::BeginPlay()
@@ -22,5 +33,9 @@ void AProjectileBullet::BeginPlay()
 
 void AProjectileBullet::Fire()
 {
-	staticMesh->AddForce(2000.f*GetActorForwardVector()*10000.f);
+	auto forceToAdd = 3000.f * GetActorForwardVector();
+	//forceToAdd *= 1000.f;
+	movement->Velocity = forceToAdd;
+	//movement->AddForce(forceToAdd);
+
 }

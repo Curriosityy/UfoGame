@@ -9,6 +9,7 @@
 /**
  * 
  */
+class UProjectileMovementComponent;
 UCLASS()
 class UFOSHOOTER_API AProjectileBullet : public ABullet
 {
@@ -16,6 +17,8 @@ class UFOSHOOTER_API AProjectileBullet : public ABullet
 protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* staticMesh;
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* movement;
 public:
 	AProjectileBullet();
 	virtual void BeginPlay() override;

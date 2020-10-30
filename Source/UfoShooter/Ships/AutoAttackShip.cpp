@@ -10,7 +10,7 @@ void AAutoAttackShip::BeginPlay()
 
 void AAutoAttackShip::StartShooting()
 {
-	GetWorldTimerManager().SetTimer(timeHandler, this, &AAutoAttackShip::Shoot, currentGun->GetFirerate(), true, .0f);
+	GetWorldTimerManager().SetTimer(timeHandler, this, &AAutoAttackShip::Shoot, currentGun->GetFirerate(), true, 0.f);
 }
 
 void AAutoAttackShip::StopShooting()
