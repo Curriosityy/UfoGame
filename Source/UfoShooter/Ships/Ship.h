@@ -22,33 +22,22 @@ protected:
 		UStaticMeshComponent* meshComponent;
 	UPROPERTY(EditAnywhere)
 		UShipMovementComponent* movementComponent;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<AGun> startGunBP;
-	UPROPERTY(EditAnywhere)
-		USceneComponent* muzzlePosition;
 
-	AGun* currentGun;
-	FTimerHandle timeHandler;
 	virtual void BeginPlay() override;
 
-	virtual void MoveX(float value);
-	virtual void MoveY(float value);
 	UFUNCTION()
-	virtual void Shoot();
+		void Die();
 
 	UFUNCTION()
-	void StartShooting();
+		virtual void MoveX(float value);
 	UFUNCTION()
-	void SwitchGun(AGun* newGun);
-	UFUNCTION()
-	void StopShooting();
-	UFUNCTION()
-	void Die();
+		virtual void MoveY(float value);
+
+
 public:
 	AShip();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UPawnMovementComponent* GetMovementComponent() const;
-	AGun* GetCurrentGun() const;
 	virtual void DealDamage(int damage);
 };

@@ -21,24 +21,14 @@ AShip::AShip()
 
 	movementComponent = CreateDefaultSubobject<UShipMovementComponent>(TEXT("MovementComponent"));
 	movementComponent->UpdatedComponent = RootComponent;
-
-	muzzlePosition = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzlePosition"));
-	muzzlePosition->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	
 }
 
 void AShip::BeginPlay()
 {
 	Super::BeginPlay();
 	hp = maxHP;
-	SwitchGun(GetWorld()->SpawnActor<AGun>(startGunBP));
-	StartShooting();
 }
 
-void AShip::StartShooting()
-{
-	GetWorldTimerManager().SetTimer(timeHandler, this, &AShip::Shoot, currentGun->GetFirerate(), true, .0f);
-}
 
 void AShip::Tick(float DeltaTime)
 {
@@ -67,38 +57,15 @@ void AShip::MoveY(float value)
 	}
 }
 
-void AShip::Shoot()
-{
-	currentGun->FireProjectile();
-}
-
-void AShip::SwitchGun(AGun* newGun)
-{
-	StopShooting();
-	currentGun = newGun;
-	currentGun->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
-	currentGun->SetActorTransform(muzzlePosition->GetComponentTransform());
-	newGun->SetOwner(this);
-	StartShooting();
-}
-
-void AShip::StopShooting()
-{
-	GetWorldTimerManager().ClearTimer(timeHandler);
-}
 
 void AShip::Die()
 {
+	
 }
 
 UPawnMovementComponent* AShip::GetMovementComponent() const
 {
 	return movementComponent;
-}
-
-AGun* AShip::GetCurrentGun() const
-{
-	return currentGun;
 }
 
 void AShip::DealDamage(int damage)
