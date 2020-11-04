@@ -33,7 +33,7 @@ void AProjectileBullet::BeginPlay()
 
 void AProjectileBullet::Fire()
 {
-	auto forceToAdd = 3000.f * GetActorForwardVector();
+	auto forceToAdd = 5000.f * GetActorForwardVector();
 	//forceToAdd *= 1000.f;
 	movement->Velocity = forceToAdd;
 	//movement->AddForce(forceToAdd);
