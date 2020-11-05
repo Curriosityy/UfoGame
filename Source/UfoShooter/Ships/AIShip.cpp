@@ -22,5 +22,5 @@ void AAIShip::Tick(float DeltaTime)
 void AAIShip::BeginDestroy()
 {
 	Super::BeginDestroy();
-	//moveVectorProvider->~IMoveVectorProvider();
+	moveVectorProvider->~IMoveVectorProvider();
 }

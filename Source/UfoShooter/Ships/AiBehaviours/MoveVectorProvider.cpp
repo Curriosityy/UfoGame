@@ -9,6 +9,10 @@ void IMoveVectorProvider::RestartTicks()
 	Tick = 0;
 }
 
+IMoveVectorProvider::~IMoveVectorProvider()
+{
+}
+
 FVector IMoveVectorProvider::GetMoveVector(float DeltaTime)
 {
 	check(0 && "This method need to be overrided");
