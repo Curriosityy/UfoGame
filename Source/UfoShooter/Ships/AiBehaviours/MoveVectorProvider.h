@@ -24,10 +24,7 @@ class UFOSHOOTER_API IMoveVectorProvider
 public:
 	UFUNCTION()
 	virtual FVector GetMoveVector(float tick);
-	void Initialize(float y0, float ymax, float ymin);
+	void RestartTicks();
 protected:
 	float Tick = 0;
-	float Y0 = 0;
-	float Ymax = 0;
-	float Ymin = 0;
 };

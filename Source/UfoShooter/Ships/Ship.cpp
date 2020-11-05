@@ -60,7 +60,7 @@ void AShip::MoveY(float value)
 
 void AShip::Die()
 {
-	
+	Destroy();
 }
 
 UPawnMovementComponent* AShip::GetMovementComponent() const
@@ -71,7 +71,7 @@ UPawnMovementComponent* AShip::GetMovementComponent() const
 void AShip::DealDamage(int damage)
 {
 	hp -= damage;
-	if (damage <= 0)
+	if (hp <= 0)
 	{
 		Die();
 	}
