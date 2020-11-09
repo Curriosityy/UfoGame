@@ -41,8 +41,8 @@ void AObjectPool::BeginPlay()
 void AObjectPool::BeginDestroy()
 {
 	Super::BeginDestroy();
-
-	pool->~TQueue();
+	if(pool!=nullptr)
+		pool->~TQueue();
 }
 
 void AObjectPool::Tick(float DeltaTime)

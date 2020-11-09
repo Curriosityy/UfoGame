@@ -39,3 +39,9 @@ void AProjectileBullet::Fire()
 	//movement->AddForce(forceToAdd);
 
 }
+
+void AProjectileBullet::BulletHit(AActor* OverlappedActor, AActor* OtherActor)
+{
+	Super::BulletHit(OverlappedActor, OtherActor);
+	Destroy();
+}

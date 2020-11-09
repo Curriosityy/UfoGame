@@ -19,6 +19,7 @@ protected:
 	UStaticMeshComponent* staticMesh;
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* movement;
+	virtual void BulletHit(AActor* OverlappedActor, AActor* OtherActor) override;
 public:
 	AProjectileBullet();
 	virtual void BeginPlay() override;
